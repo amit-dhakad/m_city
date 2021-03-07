@@ -32,7 +32,6 @@ export default class Stripes extends Component {
   }
 
   showStripes() {
-    console.log('this.state.stripes: ', this.state.stripes);
     return this.state.stripes.map((stripe, i) => (
       <Animate
         key={i}
@@ -63,18 +62,13 @@ export default class Stripes extends Component {
         }}
       >
         {({ opacity, left, rotate, top, background }) => {
-          console.log('opacity: ', opacity);
-          console.log('top: ', top);
-          console.log('left: ', left);
-          console.log('rotate: ', rotate);
-          console.log('background: ', background);
           return (
             <div
               className="stripe"
               style={{
                 background,
                 opacity,
-                transform: `rotate(${rotate}deg) translate(${left}px,${top}px,)`,
+                transform: `rotate(${rotate}deg) translate(${left}px,${top}px)`,
               }}
             ></div>
           );
