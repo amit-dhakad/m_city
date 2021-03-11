@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
+import Slide from 'react-reveal/Slide';
 import { firebaseMatches } from '../../../firebase';
+import MatchesBlock from '../../ui/matches_block';
 import { firebaseLooper, reverseArray } from '../../ui/misc';
 class Blocks extends Component {
   constructor(props) {
@@ -20,11 +22,20 @@ class Blocks extends Component {
         });
       });
   }
-  showMatches() {
-    return <div>match</div>;
+  showMatches(matches) {
+    return matches
+      ? matches.map((match) => (
+          <Slide bottom key={match.id}>
+            <div className="item">
+              <div className="wrapper">
+                <MatchesBlock match={match} />
+              </div>
+            </div>
+          </Slide>
+        ))
+      : null;
   }
   render() {
-    console.log(this.state);
     return (
       <div className="home_matches">{this.showMatches(this.state.matches)}</div>
     );
