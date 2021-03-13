@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Fade from 'react-reveal';
 import FormField from '../../ui/formFields';
+import { validate } from '../../ui/misc';
 class Enroll extends Component {
   constructor(props) {
     super(props);
@@ -27,6 +28,21 @@ class Enroll extends Component {
     };
   }
 
+  updateForm(element) {
+    const newFormData = {
+      ...this.state.formData,
+    };
+    const newElement = { ...newFormData[element.id] };
+    newElement.value = element.event.target.value;
+    let validData = validate(newElement);
+    newFormData[element.id] = newElement;
+    newElement.valid = validData[0];
+    newElement.validationMessage = validData[1];
+    newFormData[element.id] = newElement;
+    this.setState({
+      formData: newFormData,
+    });
+  }
   submitForm() {}
 
   render() {
@@ -36,7 +52,11 @@ class Enroll extends Component {
           <form onSubmit={(event) => this.onsubmitForm(event)}>
             <div className="enroll_title">Enroll your email</div>
             <div className="enroll_input">
-              <FormField id={'email'} formData={this.state.formData.email} />
+              <FormField
+                id={'email'}
+                formData={this.state.formData.email}
+                change={(element) => this.updateForm(element)}
+              />
             </div>
           </form>
         </div>
