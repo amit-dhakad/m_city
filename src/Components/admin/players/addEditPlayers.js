@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { firebasePlayers } from '../../../firebase';
-// import { firebaseDB, firebase, firebasePlayers } from '../../../firebase';
+import { firebase, firebaseDB, firebasePlayers } from '../../../firebase';
 import AdminLayout from '../../../Hoc/AdminLayout';
 import Fileuploader from '../../ui/fileuploader';
 import FormField from '../../ui/formFields';
@@ -94,6 +93,21 @@ export default class AddEditPlayers extends Component {
     };
   }
 
+  updateFields(player, playerId, formType, defaultImg) {
+    const newFormData = { ...this.state.formData };
+
+    for (let key in newFormData) {
+      newFormData[key].value = player[key];
+      newFormData[key].valid = true;
+    }
+
+    this.setState({
+      playerId,
+      defaultImg,
+      formType,
+      formData: newFormData,
+    });
+  }
   componentDidMount() {
     const playerId = this.props.match.params.id;
     if (!playerId) {
@@ -101,6 +115,28 @@ export default class AddEditPlayers extends Component {
         formType: 'Add player',
       });
     } else {
+      firebaseDB
+        .ref(`players/${playerId}`)
+        .once('value')
+        .then((snapshot) => {
+          const playerData = snapshot.val();
+          firebase
+            .storage()
+            .ref('players')
+            .child(playerData.image)
+            .getDownloadURL()
+            .then((url) => {
+              this.updateFields(playerData, playerId, 'Edit player', url);
+            })
+            .catch((e) => {
+              this.updateFields(
+                { ...playerData, image: '' },
+                playerId,
+                'Edit player',
+                ''
+              );
+            });
+        });
     }
   }
 
@@ -147,6 +183,17 @@ export default class AddEditPlayers extends Component {
 
     if (formIsValid) {
       if (this.state.formType === 'Edit player') {
+        firebaseDB
+          .ref(`players/${this.state.playerId}`)
+          .update(dataToSubmit)
+          .then(() => {
+            console.log('succes');
+            this.successForm('Update correctly ');
+          })
+          .catch((e) => {
+            console.log(e);
+            this.setState({ formError: true });
+          });
       } else {
         firebasePlayers
           .push(dataToSubmit)
