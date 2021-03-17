@@ -9,6 +9,8 @@ import PrivateRoute from './Components/authRoutes/privateRoutes';
 import PublicRoute from './Components/authRoutes/publicRoutes';
 import Home from './Components/home';
 import SignIn from './Components/signin';
+import TheMatches from './Components/theMatches';
+import TheTeam from './Components/theTeam';
 import Layout from './Hoc/Layout';
 const Routes = (props) => {
   return (
@@ -63,6 +65,20 @@ const Routes = (props) => {
           path="/sign_in"
           exact
           component={SignIn}
+        />
+        <PublicRoute
+          {...props}
+          restricted={false}
+          path="/the_matches"
+          exact
+          component={TheMatches}
+        />
+        <PublicRoute
+          {...props}
+          restricted={false}
+          path="/the_team"
+          exact
+          component={TheTeam}
         />
         <PublicRoute
           {...props}
