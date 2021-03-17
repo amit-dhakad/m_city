@@ -80,7 +80,7 @@ class Fileuploader extends Component {
           </div>
         ) : null}
 
-        {this.setState.isUploading ? (
+        {this.state.isUploading ? (
           <div
             className="progress"
             style={{ textAlign: 'center', margin: '30px 0' }}
